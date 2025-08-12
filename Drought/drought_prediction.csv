@@ -1,0 +1,6 @@
+city,date,rainfall_mm,avg_temp_c,soil_moisture,reservoir_level,population,past_month_consumption,drought_event
+Springfield,2024-01-01,50,28,0.25,500000,100000,300000,1
+Shelbyville,2024-01-01,120,22,0.50,800000,150000,400000,0
+Ogdenville,2024-01-01,30,32,0.15,300000,80000,250000,1
+North Haverbrook,2024-01-01,200,18,0.60,900000,200000,500000,0
+Capital City,2024-01-01,75,26,0.40,700000,300000,600000,0

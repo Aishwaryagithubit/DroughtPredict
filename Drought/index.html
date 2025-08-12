@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Drought Prediction App</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; background:#f5f7fa; }
+    h1 { color: #2c3e50; }
+    label { display: block; margin-top: 1rem; }
+    input, button { padding: 0.5rem; font-size: 1rem; width: 100%; max-width: 400px; }
+    button { margin-top: 1rem; cursor: pointer; background: #3498db; color: white; border: none; border-radius: 4px; }
+    #result { margin-top: 2rem; padding: 1rem; background: #ecf0f1; border-radius: 6px; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+
+  <h1>Drought Prediction & Water Demand/Supply</h1>
+
+  <form id="predictForm">
+    <label>City: <input type="text" id="city" required></label>
+    <label>Rainfall (mm): <input type="number" step="0.01" id="rainfall_mm" required></label>
+    <label>Average Temperature (°C): <input type="number" step="0.01" id="avg_temp_c" required></label>
+    <label>Soil Moisture (0-1): <input type="number" step="0.01" min="0" max="1" id="soil_moisture" required></label>
+    <label>Reservoir Level: <input type="number" id="reservoir_level" required></label>
+    <label>Population: <input type="number" id="population" required></label>
+    <label>Past Month Consumption: <input type="number" id="past_month_consumption" required></label>
+    <button type="submit">Predict</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    const form = document.getElementById('predictForm');
+    const resultDiv = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      resultDiv.textContent = "Loading...";
+
+      const data = {
+        city: document.getElementById('city').value,
+        rainfall_mm: parseFloat(document.getElementById('rainfall_mm').value),
+        avg_temp_c: parseFloat(document.getElementById('avg_temp_c').value),
+        soil_moisture: parseFloat(document.getElementById('soil_moisture').value),
+        reservoir_level: parseFloat(document.getElementById('reservoir_level').value),
+        population: parseInt(document.getElementById('population').value),
+        past_month_consumption: parseFloat(document.getElementById('past_month_consumption').value)
+      };
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) throw new Error(`Error: ${response.status}`);
+
+        const json = await response.json();
+
+        resultDiv.innerHTML = `
+          <strong>Prediction for ${json.city}:</strong><br>
+          Drought Probability: ${(json.drought_probability*100).toFixed(2)}%<br>
+          Predicted Water Demand (m³): ${json.predicted_demand_m3.toFixed(0)}<br>
+          Predicted Water Supply (m³): ${json.predicted_supply_m3.toFixed(0)}
+        `;
+
+      } catch (err) {
+        resultDiv.innerHTML = `<p class="error">Failed to get prediction: ${err.message}</p>`;
+      }
+    });
+  </script>
+
+</body>
+</html>
