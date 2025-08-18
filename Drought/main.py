@@ -22,6 +22,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 def load_models():
     files = {
         "drought": "drought_clf.joblib",
@@ -102,3 +103,4 @@ def predict(sample: Sample):
         "predicted_demand_m3": demand,
         "predicted_supply_m3": supply
     }
+
