@@ -1,1 +1,1 @@
-# DroughtPredict
+# DroughtPrediction App
