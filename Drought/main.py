@@ -7,7 +7,7 @@ import sqlite3
 from typing import Optional
 import os
 
-// rough sketch
+#rough sketch
 MODEL_DIR = "models"
 DB = "alerts.db"
 ALERT_DROUGHT_PROB_THRESHOLD = 0.6
@@ -104,5 +104,6 @@ def predict(sample: Sample):
         "predicted_demand_m3": demand,
         "predicted_supply_m3": supply
     }
+
 
 
